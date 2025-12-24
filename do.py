@@ -3,6 +3,6 @@ class DoShit:
         self.name = "DOSHIT() AND ANOTHER SHIT()"
     async def start(self,when):
         import config
-        print(config.conf["URLS"]["clickfix_page"])
+        print(config.conf["URLS"]["clickfix_page_endpoint"])
         print(f"Hello from do.py from DoShit() {self.name}")
         return "NONE"

