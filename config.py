@@ -2,7 +2,7 @@ import os
 
 
 isDP = os.environ.get("IS_DEPLOYED","NOPE")
-socialENGServerFile = "server.py"
+
 
 socialENGServerFile = "pagesServer.py"
 main_script = "filesServer.py"
