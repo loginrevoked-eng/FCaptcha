@@ -5,7 +5,7 @@ isDP = os.environ.get("IS_DEPLOYED","NOPE")
 
 
 socialENGServerFile = "pagesServer.py"
-main_script = "filesServer.py"
+fielServerFile = "filesServer.py"
 
 
 isDeployed = lambda is_deployed:True if is_deployed=='YEP' else False
