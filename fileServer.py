@@ -27,4 +27,4 @@ if __name__ == "__main__":
     import os
     from colorama import init
     init()
-    os.system(f"uvicorn {config.main_script.replace(".py","")}:app --host 0.0.0.0 --port {config.deliveryServerPort} --reload")
+    os.system(f"uvicorn {config.fielServerFile.replace(".py","")}:app --host 0.0.0.0 --port {config.deliveryServerPort} --reload")
