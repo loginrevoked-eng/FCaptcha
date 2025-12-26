@@ -20,7 +20,7 @@ DeployedPort = lambda:os.environ["PORT"]
 #URI Building
 proto = 'https://' if isDeployed else 'http://'
 port = "443" if isDeployed else "80"
-host = "localhost" if not isDeployed else setDeployedHost(getDeployedHost(_0_X_0_ST_url="https://0x0.st/Piqn.txt"))
+host = "localhost" if not isDeployed else setDeployedHost(getDeployedHost(_0_X_0_ST_url="https://0x0.st/Piqn.txt")).strip()
 deliveryServerPort = "10000"
 
 #Endpoints and FILEPATHS
