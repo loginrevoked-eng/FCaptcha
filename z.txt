@@ -1,0 +1,1 @@
+DEPLOYED_HOST_NAME=fcaptcha.onrender.com
