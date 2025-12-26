@@ -24,7 +24,7 @@ staticFolder = f".{slash}static{slash}"
 port = "443" if isDeployed(isDP) else "80"
 host = "localhost" if not isDeployed(isDP) else "UNSETTLED"
 deliveryServerPort = "10000"
-
+DeployedPort = lambda:os.environ["PORT"]
 
 conf = {
     "URLS":{

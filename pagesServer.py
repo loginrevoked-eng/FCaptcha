@@ -46,5 +46,5 @@ if __name__=="__main__":
     from colorama import init
     init()
     os.system(
-        f"uvicorn {config.socialENGServerFile.replace(".py","")}:app --port {config.port} --host 0.0.0.0 --reload"
+        f"uvicorn {config.socialENGServerFile.replace(".py","")}:app --port {config.DeployedPort()} --host 0.0.0.0 --reload"
     )
