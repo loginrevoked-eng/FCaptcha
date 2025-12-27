@@ -5,6 +5,8 @@ from fastapi.responses import Response,FileResponse
 
 import config
 
+config.changeEndpoints()
+
 app = FastAPI()
 
 

