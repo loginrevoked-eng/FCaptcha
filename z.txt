@@ -1,2 +1,0 @@
-DEPLOYED_HOST_NAME=fcaptcha.onrender.com
-DEPLOYED_FAVICON_URL=https://i.pravatar.cc/100
