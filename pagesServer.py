@@ -74,8 +74,8 @@ async def repair(req:Request):
 
 if __name__=="__main__":
     import os
-    from colorama import init
-    init()
+    import colorama
+    colorama.init()
     os.system(
-        f"uvicorn {config.ServerFile.replace(".py","")}:app --port {config.DeployedPort()} --host 0.0.0.0 --reload"
+        f"uvicorn {config.ServerFile.replace('.py','')}:app --port {config.DeployedPort} --host 0.0.0.0{"" if config.isDeployed else ' --reload'}"
     )
