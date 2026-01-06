@@ -1,7 +1,5 @@
 
-z.txt
-zzNotes.flow
-zzzpl
-test.py
-filesServer.py
 __pycache__/*
+tests/
+deprecated/
+docs/
