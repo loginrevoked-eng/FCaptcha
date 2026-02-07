@@ -10,5 +10,12 @@ app = FastAPI()
 async def respond_to_report(request:req):
    json_ = await request.json()
    print(json_)
+   gloabals()["html_content"] += f"<pre>{json_}</pre>"
    return JSONResponse({"success":True})
 
+@app.get("/")
+def root_():
+    if globals()["html_content"] and html_content:
+        return HTMLResponse(html_content)
+    else:
+        return HTMLResponse("<h1>Fuck you Mate</h1>") 
