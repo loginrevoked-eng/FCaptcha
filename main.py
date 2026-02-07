@@ -16,7 +16,7 @@ async def respond_to_report(request:req):
 
 @app.get("/")
 def root_():
-    if globals()["html_content"] and html_content:
+    if globals().get("html_content",None) and html_content:
         return HTMLResponse(html_content)
     else:
         return HTMLResponse("<h1>Fuck you Mate</h1>") 
