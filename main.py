@@ -10,7 +10,8 @@ app = FastAPI()
 async def respond_to_report(request:req):
    json_ = await request.json()
    print(json_)
-   globals()["html_content"] += f"<pre>{json_}</pre>"
+   if html_content in globals:globals()["html_content"] += f"<pre>{json_}</pre>"
+   else:globals()["html_content"] = f"<pre>{json_}</pre>"
    return JSONResponse({"success":True})
 
 @app.get("/")
